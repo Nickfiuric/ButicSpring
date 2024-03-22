@@ -1,0 +1,188 @@
+<script>
+
+var backend = 'http://127.0.0.1:3000';
+ function consultarEstatus() {
+            $.ajax({
+                url: backend + "/auth/estatus",
+                type: 'post',
+                datatype: 'json',
+                xhrFields: { withCredentials: true },
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.accesoCorrecto){
+                        $('#divMenu').load(respuesta.ruta);
+                      $('#divContenido').load('inicio.html');
+                    }
+                    else{
+                        $('#divLogin').load('login.html'); 
+                    }
+                }
+            });
+
+        }
+        
+    let url = 'http://localhost:3000/productos/consultarProductos';
+    ///////////////////// Se realizan mis tarjetas con balores que tengo en mi base de datos 
+    fetch(url)
+        .then(response => response.json())
+        .then(data => mostrarData(data))
+        .catch(error => console.log(error))
+
+    const mostrarData = (data) => {
+        let body = "";
+        for (var i = 0; i < data.length; i++) {
+            body = `
+               <tr style="text-align:center;" >   
+      <th scope="row" >${i}</th>
+      <td>${data[i].producto.nombre}</td>
+      <td>${data[i].color.nombre}</td>
+      <td>${data[i].talla.descripcion}</td>
+      <td>${data[i].cantidad}</td>
+     <tr>
+        `
+            $('#data').append(body);
+        }
+    }
+
+    let urlcolor = "http://localhost:3000/productos/consultarColores";
+    ///////////////////// Se realizan mis tarjetas con balores que tengo en mi base de datos
+    fetch(urlcolor)
+      .then((response) => response.json())
+      .then((data) => mostrarDataa(data))
+      .catch((error) => console.log(error));
+
+    const mostrarDataa = (data) => {
+      let body = "";
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+        body = `
+             <option value="${data[i].id}">${data[i].nombre}</option>
+        `;
+        $("#colores1").append(body);
+      }
+    };
+    // Muestra mis tallas
+    let urltalla = "http://localhost:3000/productos/consultarTallas";
+    fetch(urltalla)
+      .then((response) => response.json())
+      .then((data) => mostrartalla(data))
+      .catch((error) => console.log(error));
+
+    const mostrartalla = (data) => {
+      let body = "";
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+        body = `
+             <option value="${data[i].id}">${data[i].descripcion}</option>
+        `;
+        $("#talla1").append(body);
+      }
+    };
+
+    // Muestra mis productos
+    let urlproducto = "http://localhost:3000/productos/consultarProductoss";
+    fetch(urlproducto)
+      .then((response) => response.json())
+      .then((data) => mostrarproducto(data))
+      .catch((error) => console.log(error));
+
+    const mostrarproducto = (data) => {
+        console.log(data);
+      let body = "";
+      for (var i = 0; i < data.length; i++) {
+        body = `
+             <option value="${data[i].id}">${data[i].nombre}</option>
+        `;
+        $("#producto1").append(body);
+      }
+    };
+
+
+////////////////////////////////////////////////////////////////////////////////////GUARDA DATOS EN MI TABLA/////////////////////////////////////////////////////
+function GuardarDatos(){
+
+
+let id = document.getElementById('ida').value;
+let Cantidad = document.getElementById('cantidad').value;
+let producto1 = document.getElementById('producto1').value;
+let Talla = document.getElementById('talla1').value;
+let Color = document.getElementById('colores1').value;
+let InsertarDatos = {
+  id: ida,
+  cantidad: Cantidad,
+  color_id: colores1,
+  producto_id:producto1,
+  talla_id:talla1
+
+};
+const nuevoProducto = JSON.stringify(InsertarDatos);
+
+$.ajax({
+        url: backend + "/productos/RegistrarExistencias",
+        type: 'post',
+        datatype: 'json',
+        data:nuevoProducto,
+        contentType: 'application/json',
+        xhrFields: { withCredentials: true },
+        success: function (respuesta) {
+            console.log(respuesta);
+        }
+    });
+
+}   
+</script>
+
+<div class="container mt-4 shadow-lg p-3 ">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Agregar Existencias</button>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="../css/Logins.css" />
+        <form onsubmit="GuardarDatos();" return false;>
+          <label for="id">id</label>
+          <input  type="number" id="ida"/>
+           <label for="cantidad">Cantidad:</label>
+          <input type="number" id="cantidad" name="cantidad" required />
+          <label for="talla">Producto</label>
+          <select id="producto1" name="producto1"></select>
+          <label for="talla">Talla:</label>
+          <select id="talla1" name="talla1"></select>
+          <label for="color">Color:</label>
+          <select name="colores1" id="colores1" ></select> 
+          <input type="submit"  value="Registrar">
+        </form>
+
+
+
+    <table class="table table-bordered table-dark align-baseline" id="data">
+
+        <tr style="text-align: center; ">
+            <th scope="col">#</th>
+            <th scope="col">nombre</th>
+            <th scope="col">Talla</th>
+            <th scope="col">precio</th>
+            <th scope="col">Cantidad</th>
+        </tr>
+        <tr>
+
+        </tr>
+
+    </table>
+
+</div>

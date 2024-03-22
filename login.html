@@ -1,0 +1,46 @@
+<script>
+
+  $(function () {
+    
+  });
+
+  function solicitarAcceso() {
+      
+          var datos = {
+              username:$('#username').val(),
+              password:$('#password').val()
+          }
+          $.ajax({
+              url: backend + "/auth/login",
+              type: 'post',
+              datatype: 'json',
+              data: JSON.stringify(datos),
+              contentType: 'application/json',
+              xhrFields: { withCredentials: true },
+              success: function (respuesta) {
+                  console.log(respuesta);
+                  if(respuesta.accesoCorrecto){
+                    $('#divLogin').empty();
+                    $('#divMenu').load(respuesta.ruta);
+                    $('#divContenido').load('inicio.html');
+                  }
+                  else{
+                    alert(respuesta.mensaje);
+                  }
+              }
+          });
+      }
+  
+</script>
+  <fieldset>
+    <legend>Login</legend>
+    <div class="form-group">
+      <label for="username" class="form-label mt-4">Nombre de Usuario</label>
+      <input type="text" class="form-control" id="username" placeholder="Escribe tu nombre de usuario">
+    </div>
+    <div class="form-group">
+      <label for="password" class="form-label mt-4">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="solicitarAcceso();">Login</button>
+</form>

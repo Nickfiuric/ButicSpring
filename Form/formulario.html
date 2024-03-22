@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="/js/jquery-3.7.1.js"></script>
+    <!--Para mis funciones-->
+    <script type="text/javascript" src="/js/jquery.validate.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+  </head>
+
+  <script>
+   
+    $(function () {
+      $("#divMenu").load("/menu.html");
+    });
+
+  
+    var backend = 'http://127.0.0.1:3000';
+
+    function GuardarDatos(){
+
+      let nombreP = document.getElementById('nombreproducto').value;
+      let Precio = document.getElementById('precio').value;
+      let id = document.getElementById('id').value;
+
+      let InsertarDatos = {
+        id: id,
+        nombre: nombreP,
+        precio: Precio
+
+      };
+      const nuevoProducto = JSON.stringify(InsertarDatos);
+     
+      $.ajax({
+              url: backend + "/productos/RegistrarProducto",
+              type: 'post',
+              datatype: 'json',
+              data:nuevoProducto,
+              contentType: 'application/json',
+              xhrFields: { withCredentials: true },
+              success: function (respuesta) {
+                  console.log(respuesta);
+              }
+          });
+      
+      }
+
+
+  </script>
+
+  <body>
+    <div id="divMenu"></div>
+      <link rel="stylesheet" href="../css/Logins.css" />
+        <form onsubmit="GuardarDatos();" return false;>
+          <label for="id">id</label>
+          <input type="number" id="id"/>
+          <label for="descripcion">Producto:</label>
+          <input type="text" id="nombreproducto" name="nombreproducto" required />
+          <label for="precio">Precio:</label>
+          <input type="number" id="precio" name="precio" required />
+          <input type="submit"  value="Registrar">
+        </form>
+      </div>
+   
+</html>

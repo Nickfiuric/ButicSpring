@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <script>
+         var backend = 'http://127.0.0.1:3000';
+        $(function () {
+            consultarEstatus();
+        });
+
+        function consultarEstatus() {
+            $.ajax({
+                url: backend + "/auth/estatus",
+                type: 'post',
+                datatype: 'json',
+                xhrFields: { withCredentials: true },
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.accesoCorrecto){
+                        $('#divMenu').load(respuesta.ruta);
+                      $('#divContenido').load('inicio.html');
+                    }
+                    else{
+                        $('#divLogin').load('login.html'); 
+                    }
+                }
+            });
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="divLogin">
+        <div id="divMenu"></div>
+        <div id="divContenido"></div>
+    </div>
+</body>
+
+</html>

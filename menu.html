@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer trabajo </title>
+    <link rel="stylesheet" href="css/Logins.css">
+    <script type="text/javascript" src="js/jquery-3.7.1.js"></script><!--Para mis funciones-->
+    <script type="text/javascript" src="js/jquery.validate.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <script>
+   
+   var backend = 'http://127.0.0.1:3000';
+ function consultarEstatus() {
+            $.ajax({
+                url: backend + "/auth/estatus",
+                type: 'post',
+                datatype: 'json',
+                xhrFields: { withCredentials: true },
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.accesoCorrecto){
+                        $('#divMenu').load(respuesta.ruta);
+                      $('#divContenido').load('inicio.html');
+                    }
+                    else{
+                        $('#divLogin').load('login.html'); 
+                    }
+                }
+            });
+
+        }
+
+  </script>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/index.html">CURSNick</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarColor03" aria-controls="navbarColor03"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor03">
+          <ul class="navbar-nav me-auto">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/Tarjeta.html">Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Form/formulario.html">subir ptoducto</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                    aria-haspopup="true" aria-expanded="false">Administracion</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                    <a class="dropdown-item" href="#" onclick="$('#divContenido').load('Usuarios/usuarios.html')">Usuarioss</a>
+                </div>
+            </li>
+        
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="logout()">Salir</a>
+              </li>
+            
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-sm-2" type="search"
+              placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+
+
+  </body>
+
+</html>

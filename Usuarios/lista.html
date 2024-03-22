@@ -1,0 +1,113 @@
+<script>
+    $(function () {
+        consultarUsuarios();
+    });
+
+    function consultarUsuarios() {
+
+        $.ajax({
+            url: backend + "/usuarios/filtrar",
+            type: 'post',
+            datatype: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (respuesta) {
+                console.log(respuesta);
+                mostrarUsuarios(respuesta);
+            }
+        });
+
+    }
+
+    function limpiarVenta() {
+
+        $.ajax({
+            url: backend + "/limpiarVenta",
+            type: 'post',
+            datatype: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (respuesta) {
+                console.log(respuesta);
+                $('#divDetalle').load("ventas/detalle.html");
+            }
+        });
+
+    }
+    
+    function guardarVenta() {
+
+$.ajax({
+    url: backend + "/guardarVenta",
+    type: 'post',
+    datatype: 'json',
+    xhrFields: { withCredentials: true },
+    success: function (respuesta) {
+        console.log(respuesta);
+        $('#divDetalle').load("ventas/detalle.html");
+    }
+});
+
+}
+    function eliminarDetalle(pos){
+        $.ajax({
+            url: backend + "/eliminarDetalle/"+pos,
+            type: 'post',
+            datatype: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (respuesta) {
+                console.log(respuesta);
+                $('#divDetalle').load("ventas/detalle.html");
+            }
+        });
+    }
+  
+
+    function mostrarUsuarios(lista) {
+        var body = '';
+        $.each(lista, function (i, usuario) {
+            body += '<tr class="table-' + ((i % 2 == 0) ? 'primary' : 'secondary') + '">' +
+                '<td scope="row">' +  usuario.username + '</td>' +
+                '<td scope="row">' + usuario.rol.nombre + '</td>' +
+                '<td scope="row">' + usuario.NombreCompleto + '</td>' +
+                '<td scope="row">$' + detalle.estado + '</td>' +
+                '<td scope="row">'+
+                '</tr>';
+        });
+        $('#usuarios > tbody').html(body);
+        $('#campoTotal').html('$' + venta.total);
+        if (venta.detalles.length > 0) {
+            if(!venta.ventaRealizada){
+                $('#botonVenta').show();
+            }
+            else{
+                $('.btn-elimina').hide();
+            }
+            $('#botonLimpiar').show();
+        }
+    }
+    $('#botonVenta').hide();
+    $('#botonLimpiar').hide();
+</script>
+
+<table class="table table-hover" id="carrito">
+    <thead>
+        <tr>
+            <th scope="col">Usuario</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Estatus</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+        <tr class="table-dark">
+            <th scope="row"></th>
+            <td></td>
+            <td>Total:</td>
+            <td id="campoTotal"></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

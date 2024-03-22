@@ -1,0 +1,99 @@
+<script>
+   $(function () {
+        consultarRoles();
+        consultarEstados();
+        $('#divListado').load('usuarios/lista.html');
+    });
+
+    function consultarRoles() {
+        $.ajax({
+            url: backend + '/roles/listar',
+            type: 'post',
+            datatype: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (respuesta) {
+                console.log(respuesta);
+                mostrarRoles(respuesta);
+            }
+        });
+    }
+
+    function mostrarRoles(lista) {
+        var body = '';
+        $.each(lista, function (i, rol) {
+            $('#comboRol').append($('<option>',
+                {
+                    value:rol.uuid,
+                    text:rol.nombre
+                }
+            ));
+        });
+    }
+
+    function consultarEstados() {
+        $.ajax({
+            url: backend + '/usuarios/estados',
+            type: 'post',
+            datatype: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (respuesta) {
+                console.log(respuesta);
+                mostrarEstados(respuesta);
+            }
+        });
+    }
+
+    function mostrarEstados(lista) {
+        var body = '';
+        $.each(lista, function (i, estado) {
+            $('#comboEstado').append($('<option>',
+                {
+                    value:i,
+                    text:estado
+                }
+            ));
+        });
+    }
+</script>
+<legend>Usuarios</legend>
+<div class="form-group row">
+  <div class="col-auto">
+    <label for="cajaNombre" class="col-form-label">Nombre:</label>
+  </div>
+  <div class="col-auto">
+    <input
+      type="text"
+      class="form-control"
+      id="cajaNombre"
+      value=""
+      size="30"
+      onkeypress="filtrar(event);"
+    />
+  </div>
+  <div class="col-auto">
+    <label for="comboRol" class="col-form-label">Rol:</label>
+  </div>
+  <div class="col-auto">
+    <select class="form-select" id="comboRol">
+      <option>Mostrar Todos</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <label for="comboEstado" class="col-form-label">Estado:</label>
+  </div>
+  <div class="col-auto">
+    <select class="form-select" id="comboEstado">
+      <option>Mostrar Todos</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div>
+</div>
+
+<div id="divlistado"></div>
